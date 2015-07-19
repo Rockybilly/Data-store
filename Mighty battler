@@ -1,0 +1,258 @@
+""" My first game attempt, i know it sucks and unoriginal but 
+think of this as it's my way to practise what i recently learned,
+and try those in action. Thank you for your time."""
+
+import random, time
+#Armor and weapon values for battle function, stored in a dictionary."
+
+armor={"heavy":0.3,"medium":0.4,"light":0.5}
+weapon={"axe":7,"sword":6,"spear":5,"stick":4}
+
+#class for our hero
+class Hero(object):
+    def __init__(self,level,exp,max_exp,name,weapon,armor,max_hp,current_hp):
+        self.level=level
+        self.exp=exp
+        self.max_exp=max_exp
+        self.name=name
+        self.weapon=weapon
+        self.armor=armor
+        self.max_hp=max_hp
+        self.current_hp=current_hp
+        
+    def display(self):
+        print "Dear",self.name
+        time.sleep(0.5)
+        print "Your level:", self.level
+        time.sleep(0.5)
+        print "Your exp:", self.exp
+        time.sleep(0.5)
+        print "Exp needed for next level:)",self.max_exp
+        print "Your weapon is a", self.weapon
+        time.sleep(0.5)
+        print "Your armor is", self.armor
+        time.sleep(0.5)
+        print "Your current hp:", self.current_hp
+        time.sleep(0.5)
+        
+        
+#class for enemies       
+class Soldier(object):
+    def __init__(self,name,weapon,armor,max_hp,current_hp):
+        self.name=name
+        self.weapon=weapon
+        self.armor=armor
+        self.max_hp=max_hp
+        self.current_hp=current_hp
+    def display(self):
+        print "He is a", self.name
+        time.sleep(0.6)
+        print "His weapon is a", self.weapon
+        time.sleep(0.6)
+        print "His armor is", self.armor
+        time.sleep(0.6)
+        print "His hp:", self.current_hp
+
+        
+# Function to access a foe using numbers.
+def name(value):
+    if value==1:
+        return foe1
+    elif value==2:
+        return foe2
+    elif value==3:
+        return foe3
+    elif value==4:
+        return foe4
+    else:
+        print "There was some error."
+        
+        
+# Function to choose a random opponent every turn, higher levels harder enemies.
+def random_opponent():
+    if our_hero.level<2:
+        return name(1)
+    elif 5>our_hero.level>=2:
+        roll=random.randint(1,3)
+        return name(roll)
+    elif our_hero.level>=5:
+        roll=random.randint(2,4)
+        return name(roll)
+
+# Function I use to level up, upgrades max hp and max exp.
+def level_up():
+    print "You levelled up!"
+    print " "
+    time.sleep(1)
+    our_hero.level+=1
+    our_hero.max_exp+=100
+    our_hero.max_hp+=50
+    print "Your hp is restored and now it is", our_hero.max_hp
+    time.sleep(1)
+    our_hero.current_hp=our_hero.max_hp
+    if our_hero.level==2:
+        print "Now that you are level 2, you may encounter some stronger opponents."
+        time.sleep(3)
+        print "You have now a Medium armor !"
+        time.sleep(1)
+        our_hero.armor="medium"
+    elif our_hero.level==3:
+        print "You now wield a sword that you happen to pick up from one of your dead opponents."
+        time.sleep(3)
+        our_hero.weapon="sword"
+    elif our_hero.level==5:
+        print "Now that you are level 5, you may encounter some even more stronger opponents."
+        time.sleep(3)
+        print "You have now a Heavy armor !"
+        time.sleep(1)
+        our_hero.armor="heavy"    
+    elif our_hero.level==7:
+        print "You pull out an axe from your dead enemy's crushed skull."
+        our_hero.weapon="axe"
+    time.sleep(1)
+
+# function to initiate when you win a battle   
+def win_battle():
+    print "You have won the battle !"
+    time.sleep(1)
+    
+    if current_enemy==foe1:
+        print "You gained 40 exp."
+        our_hero.exp+=40
+    elif current_enemy==foe2:
+        print "You gained 45 exp."
+        our_hero.exp+=45
+    elif current_enemy==foe3:
+        print "You gained 50 exp."
+        our_hero.exp+=50
+    elif current_enemy==foe4:
+        print "You gained 55 exp."
+        our_hero.exp+=55
+    print " "
+
+    current_enemy.current_hp=current_enemy.max_hp
+
+    if our_hero.exp>=our_hero.max_exp:
+        level_up()
+        time.sleep(1)
+    elif our_hero.exp<our_hero.max_exp:
+        print "You need %s exp for the next level" % (our_hero.max_exp-our_hero.exp)
+        time.sleep(2)
+
+    print "You return to your home victorious."
+    print " "
+    time.sleep(1)
+    print "You fall asleep while you are dreaming about future glories."
+    print " "
+    time.sleep(1)
+    print "Here comes tomorrow..."
+    print " "
+    time.sleep(1)
+# function to initiate when you lose a battle         
+def lose_battle():
+    print "You have lost the battle !"
+    time.sleep(1)
+    print "Sorry, this means game over..."
+    time.sleep(3)
+    quit()
+
+#battle function to calculate damage and find the winner.
+def battle():
+    print "Prepare for battle !"
+    time.sleep(2)
+    while True:
+        if our_hero.current_hp>0 and current_enemy.current_hp>0:
+            base_value=random.randint(3,5)
+            damage_enemy=int(weapon[current_enemy.weapon]*base_value*armor[our_hero.armor])
+            our_hero.current_hp=int(our_hero.current_hp-damage_enemy)
+
+            
+            base_value=random.randint(4,6)
+            damage_hero=int(weapon[our_hero.weapon]*base_value*armor[current_enemy.armor])
+            current_enemy.current_hp=int(current_enemy.current_hp-damage_hero)
+            
+            print "You have dealt %s DMG, the enemy dealt %s DMG !" % (damage_hero,damage_enemy)
+            print " "
+            time.sleep(1)
+            print "Your remaining hp is %s, The enemy's remaining hp is %s !" % (our_hero.current_hp,current_enemy.current_hp)
+            time.sleep(1)
+            print "-----------------------------------------------------------------"
+            time.sleep(1)
+        elif our_hero.current_hp<=0 and current_enemy.current_hp>0:
+            lose_battle()
+        elif our_hero.current_hp>0 and current_enemy.current_hp<=0:
+            win_battle()
+            break
+        elif our_hero.current_hp<=0 and current_enemy.current_hp<=0:
+            print "Congratulations !, you each made the death blow at the same time, and died simultaneously !"
+            time.sleep(1)
+            print "Which means...."
+            time.sleep(1)
+            lose_battle()
+            
+            
+#Entrance to the game        
+print "Welcome to Mighty Battler v1.0."
+time.sleep(1)
+print "This is a game about killing foes, leveling up and killing foes again."
+time.sleep(3)
+name_him=raw_input("Name our mighty hero: ")
+time.sleep(1)
+print "Alright. %s it is." % (name_him)
+time.sleep(1)
+print "Rules are simple, you find an opponent, fight him. Level up. Get stronger, and find new enemies."
+time.sleep(4)
+print "Your first enemies will be militias"
+time.sleep(1)
+
+our_hero=Hero(1,0,100,name_him,"spear","light",250,250)
+foe1=Soldier("Militia","stick","light",50,50)
+foe2=Soldier("Hoplite","spear","light",80,80)
+foe3=Soldier("Man_At_Arms","sword","medium",100,100)
+foe4=Soldier("Berserker","axe","medium",120,100)
+
+
+# Main game loop
+while True:
+    print " "
+    time.sleep(1)
+    #Random phrases...
+    print random.choice(["You're wandering around for a worthy opponent...",
+                         "A drunk man challanges you to a duel in the tavern...",
+                         "In a dark night, you are following a path in the forest, then suddenly a man jumps in front of you and yells 'Your gold or your life'. You smile...",
+                         "You see a woman beaten by a man in the street. After you get closer you realize it's your sister. You feel furious...",
+                         "A muscular man insults you in front of everyone. You have no choice but to make him pay...",
+                         "While in a long journey, you suddenly realize a man is following you. You confront him. He attacks you..." ])
+    current_enemy=random_opponent()
+    time.sleep(4)
+    print " "
+    #Menu loop
+    while True:
+        print "Your next enemy is a",current_enemy.name
+        print " "
+        time.sleep(0.4)
+        print "You have three options available."
+        print " "
+        time.sleep(0.4)
+        print "1.Fight him now."
+        time.sleep(0.4)
+        print "2.View your stats."
+        time.sleep(0.4)
+        print "3.View enemy stats."
+        time.sleep(0.4)
+        action=raw_input("Enter one of these numbers to take an action: ")
+        print " "
+        if action=="1":
+            battle()
+            break
+        elif action=="2":
+            our_hero.display()
+            print " "
+        elif action=="3":
+            current_enemy.display()
+            print " "
+    
+        
+    
+    
+    
