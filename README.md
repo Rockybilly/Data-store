@@ -1,4 +1,3 @@
 # Data-store
-My first repository on GitHub.(so unoriginal)
+My first repository on GitHub.
 
-print "Oh yes"
